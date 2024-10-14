@@ -1110,6 +1110,7 @@ export declare class LGraphCanvas {
         }
     >;
     static link_type_colors: Record<string, string>;
+    static link_type_highlighted_colors: Record<string, string>;
     static gradients: object;
     static search_limit: number;
 
@@ -1180,6 +1181,7 @@ export declare class LGraphCanvas {
         output_off: string;
         output_on: string;
     };
+    default_connection_color_byType: Record<string, string>;
     default_link_color: string;
     dirty_area: Vector4 | null;
     dirty_bgcanvas?: boolean;
