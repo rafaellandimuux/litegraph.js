@@ -37,6 +37,7 @@ export interface INodeSlot {
 
 export interface INodeInputSlot extends INodeSlot {
     link: LLink["id"] | null;
+    related_id:any; 
 }
 export interface INodeOutputSlot extends INodeSlot {
     links: LLink["id"][] | null;
@@ -378,7 +379,16 @@ export declare class LGraph {
     runningtime: number;
     starttime: number;
     status: typeof LGraph.STATUS_RUNNING | typeof LGraph.STATUS_STOPPED;
-
+    title:string; 
+    hide_panel_left:boolean; 
+    hide_panel_right:boolean; 
+    hide_panel_center:boolean;
+    _subgraph_node:LGraphNode;
+    _is_subgraph:boolean; 
+    _nodes:[LGraphNode];
+    closeCallback:any; 
+    related_target_index:any;
+    main_output:LGraphNode | null; 
     private _nodes: LGraphNode[];
     private _groups: LGraphGroup[];
     private _nodes_by_id: Record<number, LGraphNode>;
@@ -664,6 +674,7 @@ export declare class LGraphNode {
     /** if true, the node will show the bgcolor as 'red'  */
     has_errors?: boolean;
 
+    block_delete:boolean;
     /** configure a node from an object containing the serialized info */
     configure(info: SerializedLGraphNode): void;
     /** serialize the content */
