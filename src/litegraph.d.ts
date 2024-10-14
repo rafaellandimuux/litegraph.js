@@ -177,7 +177,7 @@ export const LiteGraph: {
     NODE_BOX_OUTLINE_COLOR:string; 
 
     use_uuids:boolean; 
-    
+
     MAX_NUMBER_OF_NODES: number; //avoid infinite loops
     DEFAULT_POSITION: Vector2; //default node position
     VALID_SHAPES: ["default", "box", "round", "card"]; //,"circle"
@@ -1207,6 +1207,7 @@ export declare class LGraphCanvas {
     last_mouse_position: Vector2;
     /** Timestamp of last mouse click, defaults to 0 */
     last_mouseclick: number;
+    clear_background_color:string; 
     links_render_mode:
         | typeof LiteGraph.STRAIGHT_LINK
         | typeof LiteGraph.LINEAR_LINK
