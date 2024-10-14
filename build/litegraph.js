@@ -45,6 +45,7 @@
         WIDGET_SECONDARY_TEXT_COLOR: "#999",
 
         LINK_COLOR: "#9A9",
+        HIGHLIGHTED_LINK_COLOR: "#FFF",
         EVENT_LINK_COLOR: "#A86",
         CONNECTING_LINK_COLOR: "#AFA",
 
@@ -5343,6 +5344,9 @@ LGraphNode.prototype.executeAction = function(action)
             "normal " + LiteGraph.NODE_SUBTEXT_SIZE + "px Arial";
         this.node_title_color = LiteGraph.NODE_TITLE_COLOR;
         this.default_link_color = LiteGraph.LINK_COLOR;
+        this.default_widget_outline_color = LiteGraph.WIDGET_OUTLINE_COLOR;
+        this.default_highlighted_link_color = LiteGraph.HIGHLIGHTED_LINK_COLOR;
+        this.default_widget_bgcolor = LiteGraph.WIDGET_BGCOLOR;
         this.default_connection_color = {
             input_off: "#778",
             input_on: "#7F7", //"#BBD"
@@ -6645,12 +6649,15 @@ LGraphNode.prototype.executeAction = function(action)
 				//console.log("draggin!",this.selected_nodes);
                 for (var i in this.selected_nodes) {
                     var n = this.selected_nodes[i];
+                    if (n) {
                     n.pos[0] += delta[0] / this.ds.scale;
                     n.pos[1] += delta[1] / this.ds.scale;
-                    if (!n.is_selected) this.processNodeSelected(n, e); /*
+                        this.processNodeSelected(n, e); /*
                      * Don't call the function if the block is already selected.
                      * Otherwise, it could cause the block to be unselected while dragging.
                      */
+                }
+
                 }
 
                 this.dirty_canvas = true;
@@ -8124,8 +8131,52 @@ LGraphNode.prototype.executeAction = function(action)
             console.warn("subgraph without subnode");
             return;
         }
+        if (!subgraph.hide_panel_left) {
         this.drawSubgraphPanelLeft(subgraph, subnode, ctx)
+        }
+
+        if (!subgraph.hide_panel_right) {
         this.drawSubgraphPanelRight(subgraph, subnode, ctx)
+    }
+
+        if (!subgraph.hide_panel_center) {
+            this.drawSubgraphPanelCenter(subgraph, subnode, ctx)
+        }
+        
+        
+    }
+
+
+    LGraphCanvas.prototype.drawSubgraphPanelCenter = function (subgraph, subnode, ctx) {
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fillRect(0, 0, this.bgcanvas.width, 60);
+
+        ctx.fillStyle = "#1d252c";
+        ctx.font = "24px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText(subgraph.title || "", 20, 40, 500);
+
+
+        if (this.drawButton(this.bgcanvas.width - 140, 15, 120, 30, "Cancel", "#8e0000", "#e72d2d", "#fff")) {
+            document.querySelector("#editor-main-toolbar").style.display = "block";
+            document.querySelector("#editor-subgraph-toolbar").style.display = "none";
+
+            this.closeSubgraph();
+            this.centerOnNode(subnode);
+            return;
+        }
+
+        if (this.drawButton(this.bgcanvas.width - 270, 15, 120, 30, "Save", "#1bab4c", "#72cc8e", "#fff") && subgraph.closeCallback) {
+            if (subgraph.closeCallback() == false) {
+                return;
+            }
+
+            this.closeSubgraph();
+            this.centerOnNode(subnode);
+            return;
+        }
+
     }
 
     LGraphCanvas.prototype.drawSubgraphPanelLeft = function (subgraph, subnode, ctx) {
@@ -8673,6 +8724,9 @@ LGraphNode.prototype.executeAction = function(action)
                         ctx.globalAlpha = 0.4 * editor_alpha;
                     }
 
+                    ctx.strokeStyle = "#FFF";
+                    ctx.lineWidth = 1;
+
                     ctx.fillStyle =
                         slot.link != null
                             ? slot.color_on ||
@@ -8739,18 +8793,23 @@ LGraphNode.prototype.executeAction = function(action)
 						else
 	                        ctx.arc(pos[0], pos[1], 4, 0, Math.PI * 2);
                     }
+
+
                     ctx.fill();
+                    ctx.stroke();
 
                     //render name
                     if (render_text) {
                         var text = slot.label != null ? slot.label : slot.name;
                         if (text) {
                             ctx.fillStyle = LiteGraph.NODE_TEXT_COLOR;
+                            //ctx.font = "bold " + LiteGraph.NODE_SUBTEXT_SIZE + "px Arial";;
                             if (horizontal || slot.dir == LiteGraph.UP) {
                                 ctx.fillText(text, pos[0], pos[1] - 10);
                             } else {
                                 ctx.fillText(text, pos[0] + 10, pos[1] + 5);
                             }
+                            //ctx.font = this.inner_text_font;
                         }
                     }
                 }
@@ -9186,10 +9245,12 @@ LGraphNode.prototype.executeAction = function(action)
                 }
                 
                 ctx.fillStyle = node.boxcolor || colState || LiteGraph.NODE_DEFAULT_BOXCOLOR;
+
+                
+                if (!node.hideTitleIcon) {
 				if(low_quality)
 					ctx.fillRect( title_height * 0.5 - box_size *0.5, title_height * -0.5 - box_size *0.5, box_size , box_size  );
-				else
-				{
+                    else {
 					ctx.beginPath();
 					ctx.arc(
 						title_height * 0.5,
@@ -9200,6 +9261,9 @@ LGraphNode.prototype.executeAction = function(action)
 					);
 					ctx.fill();
 				}
+                }
+
+
             } else {
                 if (low_quality) {
                     ctx.fillStyle = "black";
@@ -9236,12 +9300,13 @@ LGraphNode.prototype.executeAction = function(action)
                 var title = String(node.getTitle());
                 if (title) {
                     if (selected) {
-                        ctx.fillStyle = LiteGraph.NODE_SELECTED_TITLE_COLOR;
+                        ctx.fillStyle = node.constructor.selected_title_text_color || LiteGraph.NODE_SELECTED_TITLE_COLOR;
                     } else {
                         ctx.fillStyle =
                             node.constructor.title_text_color ||
                             this.node_title_color;
                     }
+
                     if (node.flags.collapsed) {
                         ctx.textAlign = "left";
                         var measure = ctx.measureText(title);
@@ -9517,7 +9582,7 @@ LGraphNode.prototype.executeAction = function(action)
             color = this.default_link_color;
         }
         if (link != null && this.highlighted_links[link.id]) {
-            color = "#FFF";
+            color = LGraphCanvas.link_type_highlighted_colors[link.type] || this.default_highlighted_link_color; // "#FFF";
         }
 
         start_dir = start_dir || LiteGraph.RIGHT;
@@ -9878,8 +9943,8 @@ LGraphNode.prototype.executeAction = function(action)
         var show_text = this.ds.scale > 0.5;
         ctx.save();
         ctx.globalAlpha = this.editor_alpha;
-        var outline_color = LiteGraph.WIDGET_OUTLINE_COLOR;
-        var background_color = LiteGraph.WIDGET_BGCOLOR;
+        var outline_color = this.default_widget_outline_color;
+        var background_color = this.default_widget_bgcolor;
         var text_color = LiteGraph.WIDGET_TEXT_COLOR;
 		var secondary_text_color = LiteGraph.WIDGET_SECONDARY_TEXT_COLOR;
         var margin = 15;
@@ -9901,17 +9966,24 @@ LGraphNode.prototype.executeAction = function(action)
 
             switch (w.type) {
                 case "button":
+                    if (w.options.bgcolor) {    
+                        ctx.fillStyle = w.options.bgcolor;
+                    }
+
+                    
+
                     if (w.clicked) {
                         ctx.fillStyle = "#AAA";
                         w.clicked = false;
                         this.dirty_canvas = true;
                     }
+                    
                     ctx.fillRect(margin, y, widget_width - margin * 2, H);
 					if(show_text && !w.disabled)
 	                    ctx.strokeRect( margin, y, widget_width - margin * 2, H );
                     if (show_text) {
                         ctx.textAlign = "center";
-                        ctx.fillStyle = text_color;
+                        ctx.fillStyle = w.options.color || text_color;
                         ctx.fillText(w.label || w.name, widget_width * 0.5, y + H * 0.7);
                     }
                     break;
@@ -10062,12 +10134,14 @@ LGraphNode.prototype.executeAction = function(action)
 	                    //ctx.stroke();
                         ctx.fillStyle = secondary_text_color;
                         const label = w.label || w.name;	
+                        const maxlength = w.options.maxlength || 30;
+                        
                         if (label != null) {
                             ctx.fillText(label, margin * 2, y + H * 0.7);
                         }
                         ctx.fillStyle = text_color;
                         ctx.textAlign = "right";
-                        ctx.fillText(String(w.value).substr(0,30), widget_width - margin * 2, y + H * 0.7); //30 chars max
+                        ctx.fillText(String(w.value).substr(0, maxlength), widget_width - margin * 2, y + H * 0.7); //30 chars max
 						ctx.restore();
                     }
                     break;
@@ -10169,7 +10243,9 @@ LGraphNode.prototype.executeAction = function(action)
 
 						var delta = x < 40 ? -1 : x > widget_width - 40 ? 1 : 0;
 						if (w.type == "number") {
-							w.value += delta * 0.1 * (w.options.step || 1);
+
+                            //w.value += delta * 0.1 * (w.options.step || 1);
+                            w.value += delta * (w.options.step || 1);
 							if ( w.options.min != null && w.value < w.options.min ) {
 								w.value = w.options.min;
 							}
@@ -10253,7 +10329,9 @@ LGraphNode.prototype.executeAction = function(action)
 						this.prompt("Value",w.value,function(v) {
 								inner_value_change(this, v);
 							}.bind(w),
-							event,w.options ? w.options.multiline : false );
+                            event,
+                            w.options ? w.options.multiline : false,
+                            w.options ? w.options.additional_custom_button : null);
 					}
 					break;
 				default:
@@ -11386,7 +11464,7 @@ LGraphNode.prototype.executeAction = function(action)
     };
 
     // refactor: there are different dialogs, some uses createDialog some dont
-    LGraphCanvas.prototype.prompt = function(title, value, callback, event, multiline) {
+    LGraphCanvas.prototype.prompt = function (title, value, callback, event, multiline, additional_custom_button) {
         var that = this;
         var input_html = "";
         title = title || "";
@@ -11394,10 +11472,16 @@ LGraphNode.prototype.executeAction = function(action)
         var dialog = document.createElement("div");
         dialog.is_modified = false;
         dialog.className = "graphdialog rounded";
+
+        var additional_element = ""; 
+        if (additional_custom_button) {
+            additional_element = `<button id='btncustom-${additional_custom_button.related_target_index}'>${additional_custom_button.title}</button>`; 
+        }
+
         if(multiline)
-	        dialog.innerHTML = "<span class='name'></span> <textarea autofocus class='value'></textarea><button class='rounded'>OK</button>";
+            dialog.innerHTML = `<span class='name' style='vertical-align: top;'></span> <textarea autofocus class='value'></textarea>${additional_element}<button id='btnok' class='rounded'>OK</button>`;
 		else
-        	dialog.innerHTML = "<span class='name'></span> <input autofocus type='text' class='value'/><button class='rounded'>OK</button>";
+            dialog.innerHTML = `<span class='name' style='vertical-align: top;'></span> <input autofocus type='text' class='value'/>${additional_element}<button id='btnok' class='rounded'>OK</button>`;
         dialog.close = function() {
             that.prompt_box = null;
             if (dialog.parentNode) {
@@ -11474,7 +11558,7 @@ LGraphNode.prototype.executeAction = function(action)
             e.stopPropagation();
         });
 
-        var button = dialog.querySelector("button");
+        var button = dialog.querySelector("button[id=btnok]");
         button.addEventListener("click", function(e) {
             if (callback) {
                 callback(input.value);
@@ -11482,6 +11566,21 @@ LGraphNode.prototype.executeAction = function(action)
             that.setDirty(true);
             dialog.close();
         });
+
+        if (additional_custom_button) {
+            var additional_button = dialog.querySelector(`button[id=btncustom-${additional_custom_button.related_target_index}]`);
+            var additionalCallback = function (e) {
+                if (additional_custom_button.callback) {
+                    additional_custom_button.callback(input.value, additional_custom_button.related_target_index);
+                }
+                that.setDirty(true);
+                dialog.close();
+            };
+
+            additional_button.addEventListener("click", additionalCallback);
+        }
+
+
 
         var rect = canvas.getBoundingClientRect();
         var offsetx = -20;
@@ -12981,7 +13080,7 @@ LGraphNode.prototype.executeAction = function(action)
             var value = {
                 value: i,
                 content:
-                    "<span style='display: block; color: #999; padding-left: 4px; border-left: 8px solid " +
+                    "<span style='display: block; color: #fff; padding-left: 4px; padding: 7px 0; border-left: 8px solid " +
                     color.color +
                     "; background-color:" +
                     color.bgcolor +
