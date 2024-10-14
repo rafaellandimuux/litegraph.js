@@ -168,9 +168,16 @@ export const LiteGraph: {
     DEFAULT_GROUP_FONT: number;
 
     LINK_COLOR: string;
+    WIDGET_BGCOLOR:string;
     EVENT_LINK_COLOR: string;
     CONNECTING_LINK_COLOR: string;
+    HIGHLIGHTED_LINK_COLOR:string; 
+    WIDGET_OUTLINE_COLOR:string; 
+    WIDGET_TEXT_COLOR:string; 
+    NODE_BOX_OUTLINE_COLOR:string; 
 
+    use_uuids:boolean; 
+    
     MAX_NUMBER_OF_NODES: number; //avoid infinite loops
     DEFAULT_POSITION: Vector2; //default node position
     VALID_SHAPES: ["default", "box", "round", "card"]; //,"circle"
