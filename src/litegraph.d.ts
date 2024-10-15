@@ -33,6 +33,7 @@ export interface INodeSlot {
     shape?: SlotShape;
     locked?: boolean;
     nameLocked?: boolean;
+    pos:[number, number];
 }
 
 export interface INodeInputSlot extends INodeSlot {
@@ -389,6 +390,7 @@ export declare class LGraph {
     closeCallback:any; 
     related_target_index:any;
     main_output:LGraphNode | null; 
+
     private _nodes: LGraphNode[];
     private _groups: LGraphGroup[];
     private _nodes_by_id: Record<number, LGraphNode>;
@@ -626,6 +628,7 @@ export declare class LGraphNode {
     is_selected: boolean;
     mouseOver: boolean;
 
+    block_delete:boolean; 
     id: number;
 
     //inputs available: array of inputs
@@ -1120,6 +1123,8 @@ export declare class LGraphCanvas {
             groupcolor: string;
         }
     >;
+
+    static DEFAULT_BACKGROUND_IMAGE:string; 
     static link_type_colors: Record<string, string>;
     static link_type_highlighted_colors: Record<string, string>;
     static gradients: object;
