@@ -64,6 +64,7 @@ export interface IWidget<TValue = any, TOptions = any> {
     last_y?: number;
     clicked?: boolean;
     marker?: boolean;
+    disabled?: boolean; 
     callback?: WidgetCallback<this>;
     /** Called by `LGraphCanvas.drawNodeWidgets` */
     draw?(
