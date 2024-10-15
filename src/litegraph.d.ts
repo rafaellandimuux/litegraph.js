@@ -34,6 +34,7 @@ export interface INodeSlot {
     locked?: boolean;
     nameLocked?: boolean;
     pos:[number, number];
+    targetId:string;
 }
 
 export interface INodeInputSlot extends INodeSlot {
@@ -337,6 +338,7 @@ export const LiteGraph: {
     ContextMenu: typeof ContextMenu;
     extendClass<A, B>(target: A, origin: B): A & B;
     getParameterNames(func: string): string[];
+    static uuidv4(); 
 };
 
 export type serializedLGraph<
@@ -627,7 +629,7 @@ export declare class LGraphNode {
     pos: Vector2;
     is_selected: boolean;
     mouseOver: boolean;
-
+    widgets:IWidget[];
     block_delete:boolean; 
     id: number;
 
