@@ -36,6 +36,7 @@ export interface INodeSlot {
     pos:[number, number];
     targetId:string;
     dynamic:boolean; 
+    related_id:string;
 }
 
 export interface INodeInputSlot extends INodeSlot {
