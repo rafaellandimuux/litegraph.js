@@ -8159,9 +8159,6 @@ LGraphNode.prototype.executeAction = function(action)
 
 
         if (this.drawButton(this.bgcanvas.width - 140, 15, 120, 30, "Cancel", "#8e0000", "#e72d2d", "#fff")) {
-            document.querySelector("#editor-main-toolbar").style.display = "block";
-            document.querySelector("#editor-subgraph-toolbar").style.display = "none";
-
             this.closeSubgraph();
             this.centerOnNode(subnode);
             return;
