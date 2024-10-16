@@ -661,7 +661,8 @@ export declare class LGraphNode {
 
     serialize_widgets: boolean;
     skip_list: boolean;
-
+    NODE_WIDTH: number;
+    
     /** Used in `LGraphCanvas.onMenuNodeMode` */
     mode?:
         | typeof LiteGraph.ON_EVENT
