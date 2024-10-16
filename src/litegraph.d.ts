@@ -35,6 +35,7 @@ export interface INodeSlot {
     nameLocked?: boolean;
     pos:[number, number];
     targetId:string;
+    dynamic:boolean; 
 }
 
 export interface INodeInputSlot extends INodeSlot {
