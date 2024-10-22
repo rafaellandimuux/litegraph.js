@@ -8159,13 +8159,17 @@ LGraphNode.prototype.executeAction = function(action)
 
 
         if (this.drawButton(this.bgcanvas.width - 140, 15, 120, 30, "Cancel", "#8e0000", "#e72d2d", "#fff")) {
+            if (subgraph.cancelSubgraphCallback){
+                subgraph.cancelSubgraphCallback(); 
+            }
+            
             this.closeSubgraph();
             this.centerOnNode(subnode);
             return;
         }
 
-        if (this.drawButton(this.bgcanvas.width - 270, 15, 120, 30, "Save", "#1bab4c", "#72cc8e", "#fff") && subgraph.closeCallback) {
-            if (subgraph.closeCallback() == false) {
+        if (this.drawButton(this.bgcanvas.width - 270, 15, 120, 30, "Save", "#1bab4c", "#72cc8e", "#fff") && subgraph.saveSubgraphCallback) {
+            if (subgraph.saveSubgraphCallback && subgraph.saveSubgraphCallback() == false) {
                 return;
             }
 

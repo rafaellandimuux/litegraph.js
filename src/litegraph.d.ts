@@ -394,7 +394,8 @@ export declare class LGraph {
     _subgraph_node:LGraphNode;
     _is_subgraph:boolean; 
     _nodes:[LGraphNode];
-    closeCallback:any; 
+    saveSubgraphCallback:any; 
+    cancelSubgraphCallback:any; 
     related_target_index:any;
     main_output:LGraphNode | null; 
 
