@@ -1135,6 +1135,7 @@ export declare class LGraphCanvas {
     >;
 
     static DEFAULT_BACKGROUND_IMAGE:string; 
+    static node_type_colors: Record<string, string>; 
     static link_type_colors: Record<string, string>;
     static link_type_highlighted_colors: Record<string, string>;
     static gradients: object;
