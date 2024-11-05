@@ -1083,6 +1083,7 @@ export declare class LGraphGroup {
     private _bounding: Vector4;
     color: string;
     font: string;
+    pos:[number, number];
 
     configure(o: SerializedLGraphGroup): void;
     serialize(): SerializedLGraphGroup;
