@@ -1084,7 +1084,8 @@ export declare class LGraphGroup {
     color: string;
     font: string;
     pos:[number, number];
-
+    size: [number, number];
+    
     configure(o: SerializedLGraphGroup): void;
     serialize(): SerializedLGraphGroup;
     move(deltaX: number, deltaY: number, ignoreNodes?: boolean): void;
