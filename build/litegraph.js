@@ -9809,7 +9809,7 @@ LGraphNode.prototype.executeAction = function(action)
 
             //circle
             ctx.beginPath();
-            ctx.arc(pos[0], pos[1], 5, 0, Math.PI * 2);
+            ctx.arc(pos[0], pos[1], this.connections_width * 2, 0, Math.PI * 2);
             ctx.fill();
         }
 
