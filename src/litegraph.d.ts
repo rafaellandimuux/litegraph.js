@@ -1200,6 +1200,7 @@ export declare class LGraphCanvas {
     clear_background: boolean;
     connecting_node: LGraphNode | null;
     connections_width: number;
+    links_ontop:boolean; 
     ctx: CanvasRenderingContext2D;
     current_node: LGraphNode | null;
     default_connection_color: {

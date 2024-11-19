@@ -5425,7 +5425,7 @@ LGraphNode.prototype.executeAction = function(action)
 
         this.connections_width = 3;
         this.round_radius = 8;
-
+        this.links_ontop = false; 
         this.current_node = null;
         this.node_widget = null; //used for widgets
 		this.over_link_center = null;
@@ -7944,7 +7944,7 @@ LGraphNode.prototype.executeAction = function(action)
             }
 
             //connections ontop?
-            if (this.graph.config.links_ontop) {
+            if (this.graph.config.links_ontop || this.links_ontop) {
                 if (!this.live_mode) {
                     this.drawConnections(ctx);
                 }
