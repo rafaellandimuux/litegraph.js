@@ -371,7 +371,7 @@ export declare class LGraph {
     filter: string;
     catch_errors: boolean;
     /** custom data */
-    config: object;
+    config: any;
     elapsed_time: number;
     fixedtime: number;
     fixedtime_lapse: number;
@@ -399,7 +399,6 @@ export declare class LGraph {
     related_target_index:any;
     main_output:LGraphNode | null; 
 
-    private _nodes: LGraphNode[];
     private _groups: LGraphGroup[];
     private _nodes_by_id: Record<number, LGraphNode>;
     /** nodes that are executable sorted in execution order */
