@@ -1387,7 +1387,7 @@ export declare class LGraphCanvas {
     /** centers the camera on a given node */
     centerOnNode(node: LGraphNode): void;
     /** changes the zoom level of the graph (default is 1), you can pass also a place used to pivot the zoom */
-    setZoom(value: number, center: Vector2): void;
+    setZoom(value: number, center: Vector2?): void;
     /** brings a node to front (above all other nodes) */
     bringToFront(node: LGraphNode): void;
     /** sends a node to the back (below all other nodes) */
