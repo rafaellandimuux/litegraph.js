@@ -8152,7 +8152,7 @@ LGraphNode.prototype.executeAction = function(action)
     LGraphCanvas.prototype.drawSubgraphPanelCenter = function (subgraph, subnode, ctx) {
 
         ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-        ctx.fillRect(0, 0, this.bgcanvas.clientWidth, 60);
+        ctx.fillRect(0, 0, this.bgcanvas.style.clientWidth, 60);
 
         ctx.fillStyle = "#1d252c";
         ctx.font = "24px Arial";
@@ -8160,7 +8160,7 @@ LGraphNode.prototype.executeAction = function(action)
         ctx.fillText(subgraph.title || "", 20, 40, 500);
 
 
-        if (this.drawButton(this.bgcanvas.clientWidth - 140, 15, 120, 30, "Cancel", "#8e0000", "#e72d2d", "#fff")) {
+        if (this.drawButton(this.bgcanvas.style.clientWidth - 140, 15, 120, 30, "Cancel", "#8e0000", "#e72d2d", "#fff")) {
             if (subgraph.cancelSubgraphCallback){
                 subgraph.cancelSubgraphCallback(); 
             }
@@ -8170,7 +8170,7 @@ LGraphNode.prototype.executeAction = function(action)
             return;
         }
 
-        if (this.drawButton(this.bgcanvas.clientWidth - 270, 15, 120, 30, "Save", "#1bab4c", "#72cc8e", "#fff") && subgraph.saveSubgraphCallback) {
+        if (this.drawButton(this.bgcanvas.style.clientWidth - 270, 15, 120, 30, "Save", "#1bab4c", "#72cc8e", "#fff") && subgraph.saveSubgraphCallback) {
             if (subgraph.saveSubgraphCallback && subgraph.saveSubgraphCallback() == false) {
                 return;
             }
