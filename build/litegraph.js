@@ -11475,6 +11475,14 @@ LGraphNode.prototype.executeAction = function(action)
         var input_html = "";
         title = title || "";
 
+        console.log(`[LGraphCanvas Prompt] title: ${title} value: ${value}`);
+        console.log("[LGraphCanvas Prompt] callback", callback);
+        console.log("[LGraphCanvas Prompt] event", event);
+        console.log("[LGraphCanvas Prompt] multiline", multiline);
+        console.log("[LGraphCanvas Prompt] additional_custom_button", additional_custom_button);
+
+
+
         var dialog = document.createElement("div");
         dialog.is_modified = false;
         dialog.className = "graphdialog rounded";
@@ -11488,6 +11496,7 @@ LGraphNode.prototype.executeAction = function(action)
             dialog.innerHTML = `<span class='name' style='vertical-align: top;'></span> <textarea autofocus class='value'></textarea>${additional_element}<button id='btnok' class='rounded'>OK</button>`;
 		else
             dialog.innerHTML = `<span class='name' style='vertical-align: top;'></span> <input autofocus type='text' class='value'/>${additional_element}<button id='btnok' class='rounded'>OK</button>`;
+
         dialog.close = function() {
             that.prompt_box = null;
             if (dialog.parentNode) {
