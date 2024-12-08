@@ -10330,7 +10330,7 @@ LGraphNode.prototype.executeAction = function(action)
 				case "text":
 					if (event.type == LiteGraph.pointerevents_method+"down") {
                         if (w.options.custom_editor_callback){
-                            w.options.custom_editor_callback().bind(w); 
+                            w.options.custom_editor_callback();
                         } else if (window.editor){
                             window.editor.showPropertyEditor(
                                 node,
