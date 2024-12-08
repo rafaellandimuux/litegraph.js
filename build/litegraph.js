@@ -10333,6 +10333,7 @@ LGraphNode.prototype.executeAction = function(action)
 
                         if (window.editor){
                             window.editor.showPropertyEditor(
+                                node,
                                 w.name, 
                                 w.value, 
                                 "",
