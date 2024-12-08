@@ -10329,12 +10329,30 @@ LGraphNode.prototype.executeAction = function(action)
 				case "string":
 				case "text":
 					if (event.type == LiteGraph.pointerevents_method+"down") {
-						this.prompt("Value",w.value,function(v) {
+                        
+
+                        if (window.editor){
+                            window.editor.showPropertyEditor(
+                                w.name, 
+                                w.value, 
+                                "",
+                                null, //validationMask
+                                null, //onCancel
+                                (propertyName, propertyValue) => {
+                                    inner_value_change(this, propertyValue);
+                                }, //onSave
+                                w.options ? w.options.additional_custom_button : null
+                            );
+                        } else{
+                            this.prompt("Value",w.value,function(v) {
 								inner_value_change(this, v);
 							}.bind(w),
                             event,
                             w.options ? w.options.multiline : false,
                             w.options ? w.options.additional_custom_button : null);
+                        }
+
+                        
 					}
 					break;
 				default:
