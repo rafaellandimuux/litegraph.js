@@ -10338,9 +10338,9 @@ LGraphNode.prototype.executeAction = function(action)
                                 "",
                                 null, //validationMask
                                 null, //onCancel
-                                function(v) {
-                                    inner_value_change(this, v);
-                                }.bind(w), //onSave
+                                (propertyName, propertyValue) => {
+                                    inner_value_change(w, propertyValue);
+                                }, //onSave
                                 w.options ? w.options.additional_custom_button : null
                             );
                         } else{
@@ -10351,7 +10351,6 @@ LGraphNode.prototype.executeAction = function(action)
                             w.options ? w.options.multiline : false,
                             w.options ? w.options.additional_custom_button : null);
                         }
-
                         
 					}
 					break;
