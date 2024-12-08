@@ -10338,9 +10338,9 @@ LGraphNode.prototype.executeAction = function(action)
                                 "",
                                 null, //validationMask
                                 null, //onCancel
-                                (propertyName, propertyValue) => {
-                                    inner_value_change(this, propertyValue);
-                                }, //onSave
+                                function(v) {
+                                    inner_value_change(this, v);
+                                }.bind(w), //onSave
                                 w.options ? w.options.additional_custom_button : null
                             );
                         } else{
