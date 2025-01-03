@@ -399,7 +399,7 @@ export declare class LGraph {
     related_target_index:any;
     main_output:LGraphNode | null; 
 
-    private _groups: LGraphGroup[];
+    _groups: LGraphGroup[];
     private _nodes_by_id: Record<number, LGraphNode>;
     /** nodes that are executable sorted in execution order */
     private _nodes_executable:
@@ -1082,6 +1082,7 @@ export declare class LGraphGroup {
     private _bounding: Vector4;
     color: string;
     font: string;
+    font_size: number;
     pos:[number, number];
     size: [number, number];
     
